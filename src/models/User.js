@@ -32,7 +32,7 @@ User.prototype.toJSON = function () {
   return values;
 };
 
-User.beforeBulkCreate(async (user) => {
+User.beforeCreate(async (user) => {
   const hashPassword = await bcrypt.hash(user.password, 10);
   user.password = hashPassword;
 });
