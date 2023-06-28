@@ -4,7 +4,7 @@ const user = require("./createData/user");
 const main = async () => {
   try {
     await sequelize.sync({ force: true });
-    await user;
+    await user();
     console.log("ME EJECUTE");
     process.exit();
   } catch (error) {
