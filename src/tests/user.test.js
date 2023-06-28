@@ -9,9 +9,8 @@ beforeAll(async () => {
     password: "pedropaco",
   };
   const res = await request(app).post(`${BASE_URL}/login`).send(user);
-  console.log(res.body);
+
   TOKEN = res.body.token;
-  console.log(TOKEN);
 });
 
 test("GET  BASE_URL, should return a status code 200 and res.body must have length 1", async () => {
