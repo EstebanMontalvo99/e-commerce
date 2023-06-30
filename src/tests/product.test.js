@@ -1,7 +1,7 @@
 const request = require("supertest");
 const app = require("../app");
 const Category = require("../models/Category");
-
+require("../models");
 const BASE_URL_USERS = "/api/v1/users/login";
 const BASE_URL = "/api/v1/products";
 let TOKEN;
