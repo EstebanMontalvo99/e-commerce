@@ -40,10 +40,11 @@ test("POST   BASE_URL, should return a 201 status and res.body.quantity===bpdy.q
   expect(res.body.quantity).toBe(cartBody.quantity);
 });
 
-test("GET    BASE_URL, should return a status code 200 and res.bodylength===1", async () => {
+test("GET -> 'URL_BASE', sholud status code 200 and res.body.length === 1", async () => {
   const res = await request(app)
     .get(BASE_URL)
     .set("Authorization", `Bearer ${TOKEN}`);
+
   expect(res.status).toBe(200);
   expect(res.body).toHaveLength(1);
 });

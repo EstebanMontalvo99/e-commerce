@@ -1,12 +1,14 @@
 const request = require("supertest");
 const app = require("../app");
-const Category = require("../models/Category");
 require("../models");
+const Category = require("../models/Category");
+const ProductImg = require("../models/ProductImg");
+
 const BASE_URL_USERS = "/api/v1/users/login";
 const BASE_URL = "/api/v1/products";
 let TOKEN;
 let category;
-let productId;
+let productId, productImg;
 
 beforeAll(async () => {
   const user = {
@@ -47,6 +49,7 @@ test("GET  BASE_URL, should return code 200, res.body.length===1 and res.body[0]
   expect(res.status).toBe(200);
   expect(res.body).toHaveLength(1);
   expect(res.body[0].category).toBeDefined();
+  expect(res.body[0].productImgs).toBeDefined();
 });
 
 test("GET  BASE_URL?category=category.id, should return code 200, res.body.length===1 and res.body[0] to be defined", async () => {
@@ -55,6 +58,7 @@ test("GET  BASE_URL?category=category.id, should return code 200, res.body.lengt
   expect(res.status).toBe(200);
   expect(res.body).toHaveLength(1);
   expect(res.body[0].category).toBeDefined();
+  expect(res.body[0].productImgs).toBeDefined();
 });
 
 test("GET  BASE_URL/:id, should return code 200 and res.body.title===smart tv", async () => {
@@ -62,6 +66,7 @@ test("GET  BASE_URL/:id, should return code 200 and res.body.title===smart tv", 
 
   expect(res.status).toBe(200);
   expect(res.body.title).toBe("smart tv");
+  expect(res.body.productImgs).toBeDefined();
 });
 
 test("PUT  BASE_URL/:id, should return code 200 and res.body.title===body.title", async () => {
@@ -75,6 +80,22 @@ test("PUT  BASE_URL/:id, should return code 200 and res.body.title===body.title"
 
   expect(res.status).toBe(200);
   expect(res.body.title).toBe(product.title);
+});
+test("POST  BASE_URL/:id/images, should return a status code 200 and res.body.length===1", async () => {
+  const productImgBody = {
+    url: "http://localhost:8080/api/v1/public/uploads/cocina.jpg",
+    filename: "cocina.jpg",
+    productId,
+  };
+  productImg = await ProductImg.create(productImgBody);
+
+  const res = await request(app)
+    .post(`${BASE_URL}/${productId}/images`)
+    .send([productImg.id])
+    .set("Authorization", `Bearer ${TOKEN}`);
+
+  expect(res.status).toBe(200);
+  expect(res.body).toHaveLength(1);
 });
 
 test("DELETE  BASE_URL/:id, should return code 204 ", async () => {
